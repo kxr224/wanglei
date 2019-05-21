@@ -61,4 +61,12 @@ public interface ShiroConstants
      * 验证码错误
      */
     public static final String CAPTCHA_ERROR = "captchaError";
+    /**
+     * 微信小程序登陆方式
+     */
+    public static final String WECHAT_LOGIN_TYPE = "WeChatRealm";
+    /**
+     * 后台管理登陆方式
+     */
+    public static final String ADMIN_LOGIN_TYPE = "UserRealm";
 }

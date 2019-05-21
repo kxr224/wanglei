@@ -40,7 +40,7 @@ public class PtpUser extends BaseEntity{
 	private String city;
 	/** l联系邮箱 */
 	private String email;
-	/** 类型0找工作 */
+	/** 类型0学生1企业 */
 	private String type;
 	/** 用户状态 用户状态 */
 	private String status;

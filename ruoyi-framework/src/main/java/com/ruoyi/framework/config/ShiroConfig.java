@@ -3,16 +3,25 @@ package com.ruoyi.framework.config;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.Filter;
 
+import com.ruoyi.framework.shiro.config.MultiModularRealmAuthenticator;
+import com.ruoyi.framework.shiro.config.MultiModularRealmAuthorizer;
+import com.ruoyi.framework.shiro.realm.WeChatRealm;
 import org.apache.commons.io.IOUtils;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
+import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
@@ -126,6 +135,33 @@ public class ShiroConfig {
     }
 
     /**
+     * 微信登陆方式Realm
+     */
+    @Bean
+    public WeChatRealm weChatRealm(EhCacheManager cacheManager) {
+        WeChatRealm weChatRealm = new WeChatRealm();
+        weChatRealm.setCacheManager(cacheManager);
+        return weChatRealm;
+    }
+
+    /**
+     * 系统自带的Realm管理，主要针对多realm
+     * */
+    @Bean
+    public ModularRealmAuthenticator modularRealmAuthenticator(){
+        //自己重写的ModularRealmAuthenticator
+        MultiModularRealmAuthenticator modularRealmAuthenticator = new MultiModularRealmAuthenticator();
+        modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+        return modularRealmAuthenticator;
+    }
+
+    @Bean
+    public ModularRealmAuthorizer modularRealmAuthorizer(){
+        //自己重写的ModularRealmAuthorizer
+        return new MultiModularRealmAuthorizer();
+    }
+
+    /**
      * 自定义sessionDAO会话
      */
     @Bean
@@ -172,10 +208,15 @@ public class ShiroConfig {
      * 安全管理器
      */
     @Bean
-    public SecurityManager securityManager(UserRealm userRealm, SpringSessionValidationScheduler springSessionValidationScheduler) {
+    public SecurityManager securityManager(UserRealm userRealm,WeChatRealm weChatRealm, SpringSessionValidationScheduler springSessionValidationScheduler) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setAuthenticator(modularRealmAuthenticator());
+        securityManager.setAuthorizer(modularRealmAuthorizer());
         // 设置realm.
-        securityManager.setRealm(userRealm);
+        List<Realm> realms = new ArrayList<>();
+        realms.add(userRealm);
+        realms.add(weChatRealm);
+        securityManager.setRealms(realms);
         // 记住我
         securityManager.setRememberMeManager(rememberMeManager());
         // 注入缓存管理器;
@@ -227,6 +268,7 @@ public class ShiroConfig {
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
         filterChainDefinitionMap.put("/weChat/applet/login/**", "anon");
+        filterChainDefinitionMap.put("/weChat/user/register", "anon");
 
         Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("onlineSession", onlineSessionFilter());

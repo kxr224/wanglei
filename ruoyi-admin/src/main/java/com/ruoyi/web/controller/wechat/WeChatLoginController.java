@@ -7,13 +7,21 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.constants.WechatErrCodeConstant;
 import com.ruoyi.entity.Code2SessionResultEntity;
+import com.ruoyi.framework.shiro.token.WeChatUserToken;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.partTime.service.IPtpUserService;
 import com.ruoyi.service.WeChatAuthService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @program: ruoyi
@@ -49,24 +57,24 @@ public class WeChatLoginController extends BaseController {
         return ajaxResult;
     }
 
-//    @Log(title = "wechat login", businessType = BusinessType.OTHER)
-//    @GetMapping("/byOpenId/{openId}")
-//    public AjaxResult loginByOpenId(@PathVariable String openId, HttpSession session) {
-//        WeChatUserToken weChatUserToken = new WeChatUserToken(openId);
-//        Subject subject = SecurityUtils.getSubject();
-//        try {
-//            subject.login(weChatUserToken);
-//            AjaxResult res = success();
-//            res.put("data", ShiroUtils.getWeChatUser());
-//            res.put("sessionId", session.getId());
-//            return res;
-//        } catch (AuthenticationException e) {
-//            String msg = "用户不存在";
-//            if (StringUtils.isNotEmpty(e.getMessage())) {
-//                msg = e.getMessage();
-//            }
-//            return error(msg);
-//        }
-//    }
+    @Log(title = "wechat login", businessType = BusinessType.OTHER)
+    @GetMapping("/byOpenId/{openId}")
+    public AjaxResult loginByOpenId(@PathVariable String openId, HttpSession session) {
+        WeChatUserToken weChatUserToken = new WeChatUserToken(openId);
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(weChatUserToken);
+            AjaxResult res = success();
+            res.put("data", ShiroUtils.getWeChatUser());
+            res.put("sessionId", session.getId());
+            return res;
+        } catch (AuthenticationException e) {
+            String msg = "用户不存在";
+            if (StringUtils.isNotEmpty(e.getMessage())) {
+                msg = e.getMessage();
+            }
+            return error(msg);
+        }
+    }
 
 }
