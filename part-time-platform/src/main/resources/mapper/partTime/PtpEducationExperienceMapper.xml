@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.partTime.mapper.PtpEducationExperienceMapper">
+    
+    <resultMap type="PtpEducationExperience" id="PtpEducationExperienceResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="educationExperience"    column="education_experience"    />
+    </resultMap>
+	
+	<sql id="selectPtpEducationExperienceVo">
+        select id, user_id, education_experience from ptp_education_experience
+    </sql>
+	
+    <select id="selectPtpEducationExperienceList" parameterType="PtpEducationExperience" resultMap="PtpEducationExperienceResult">
+        <include refid="selectPtpEducationExperienceVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="educationExperience != null  and educationExperience != '' "> and education_experience = #{educationExperience}</if>
+         </where>
+    </select>
+    
+    <select id="selectPtpEducationExperienceById" parameterType="Integer" resultMap="PtpEducationExperienceResult">
+        <include refid="selectPtpEducationExperienceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPtpEducationExperience" parameterType="PtpEducationExperience" useGeneratedKeys="true" keyProperty="id">
+        insert into ptp_education_experience
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="educationExperience != null  and educationExperience != ''  ">education_experience,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="educationExperience != null  and educationExperience != ''  ">#{educationExperience},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePtpEducationExperience" parameterType="PtpEducationExperience">
+        update ptp_education_experience
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="educationExperience != null  and educationExperience != ''  ">education_experience = #{educationExperience},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deletePtpEducationExperienceById" parameterType="Integer">
+        delete from ptp_education_experience where id = #{id}
+    </delete>
+	
+    <delete id="deletePtpEducationExperienceByIds" parameterType="String">
+        delete from ptp_education_experience where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

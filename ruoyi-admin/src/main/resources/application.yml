@@ -7,7 +7,7 @@ ruoyi:
   # 版权年份
   copyrightYear: 2019
   # 文件路径
-  profile: D:/profile/
+  profile: E:/dev-workbase/毕业设计/RuoYi/profile/
   # 获取ip地址开关
   addressEnabled: true
 
@@ -122,3 +122,9 @@ xss:
   excludes: /system/notice/*
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+wechat:
+  appId: wxc3a0a3c0076cb413
+  appSecret: 1d3d04c50af86225a1eebc2bcb297b5d
+  # 通过code登陆的链接
+  code2SessionUrl: https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={JSCODE}&grant_type=authorization_code

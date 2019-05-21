@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.Filter;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
@@ -36,13 +37,12 @@ import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
 /**
  * 权限配置加载
- * 
+ *
  * @author ruoyi
  */
 @Configuration
-public class ShiroConfig
-{
-    public static final String PREMISSION_STRING = "perms[\"{0}\"]";
+public class ShiroConfig {
+    public static final String PREMISSION_STRING = "perms[\"{0}\"]" ;
 
     // Session超时时间，单位为毫秒（默认30分钟）
     @Value("${shiro.session.expireTime}")
@@ -84,17 +84,13 @@ public class ShiroConfig
      * 缓存管理器 使用Ehcache实现
      */
     @Bean
-    public EhCacheManager getEhCacheManager()
-    {
+    public EhCacheManager getEhCacheManager() {
         net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("ruoyi");
         EhCacheManager em = new EhCacheManager();
-        if (StringUtils.isNull(cacheManager))
-        {
+        if (StringUtils.isNull(cacheManager)) {
             em.setCacheManager(new net.sf.ehcache.CacheManager(getCacheManagerConfigFileInputStream()));
             return em;
-        }
-        else
-        {
+        } else {
             em.setCacheManager(cacheManager);
             return em;
         }
@@ -103,24 +99,18 @@ public class ShiroConfig
     /**
      * 返回配置文件流 避免ehcache配置文件一直被占用，无法完全销毁项目重新部署
      */
-    protected InputStream getCacheManagerConfigFileInputStream()
-    {
-        String configFile = "classpath:ehcache/ehcache-shiro.xml";
+    protected InputStream getCacheManagerConfigFileInputStream() {
+        String configFile = "classpath:ehcache/ehcache-shiro.xml" ;
         InputStream inputStream = null;
-        try
-        {
+        try {
             inputStream = ResourceUtils.getInputStreamForPath(configFile);
             byte[] b = IOUtils.toByteArray(inputStream);
             InputStream in = new ByteArrayInputStream(b);
             return in;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new ConfigurationException(
                     "Unable to obtain input stream for cacheManagerConfigFile [" + configFile + "]", e);
-        }
-        finally
-        {
+        } finally {
             IOUtils.closeQuietly(inputStream);
         }
     }
@@ -129,8 +119,7 @@ public class ShiroConfig
      * 自定义Realm
      */
     @Bean
-    public UserRealm userRealm(EhCacheManager cacheManager)
-    {
+    public UserRealm userRealm(EhCacheManager cacheManager) {
         UserRealm userRealm = new UserRealm();
         userRealm.setCacheManager(cacheManager);
         return userRealm;
@@ -140,8 +129,7 @@ public class ShiroConfig
      * 自定义sessionDAO会话
      */
     @Bean
-    public OnlineSessionDAO sessionDAO()
-    {
+    public OnlineSessionDAO sessionDAO() {
         OnlineSessionDAO sessionDAO = new OnlineSessionDAO();
         return sessionDAO;
     }
@@ -150,8 +138,7 @@ public class ShiroConfig
      * 自定义sessionFactory会话
      */
     @Bean
-    public OnlineSessionFactory sessionFactory()
-    {
+    public OnlineSessionFactory sessionFactory() {
         OnlineSessionFactory sessionFactory = new OnlineSessionFactory();
         return sessionFactory;
     }
@@ -160,8 +147,7 @@ public class ShiroConfig
      * 会话管理器
      */
     @Bean
-    public OnlineWebSessionManager sessionManager()
-    {
+    public OnlineWebSessionManager sessionManager() {
         OnlineWebSessionManager manager = new OnlineWebSessionManager();
         // 加入缓存管理器
         manager.setCacheManager(getEhCacheManager());
@@ -186,8 +172,7 @@ public class ShiroConfig
      * 安全管理器
      */
     @Bean
-    public SecurityManager securityManager(UserRealm userRealm, SpringSessionValidationScheduler springSessionValidationScheduler)
-    {
+    public SecurityManager securityManager(UserRealm userRealm, SpringSessionValidationScheduler springSessionValidationScheduler) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
         securityManager.setRealm(userRealm);
@@ -203,8 +188,7 @@ public class ShiroConfig
     /**
      * 退出过滤器
      */
-    public LogoutFilter logoutFilter()
-    {
+    public LogoutFilter logoutFilter() {
         LogoutFilter logoutFilter = new LogoutFilter();
         logoutFilter.setLoginUrl(loginUrl);
         return logoutFilter;
@@ -214,8 +198,7 @@ public class ShiroConfig
      * Shiro过滤器配置
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager)
-    {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // Shiro的核心安全接口,这个属性是必须的
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -243,6 +226,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/login", "anon,captchaValidate");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
+        filterChainDefinitionMap.put("/weChat/applet/login/**", "anon");
 
         Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("onlineSession", onlineSessionFilter());
@@ -263,8 +247,7 @@ public class ShiroConfig
      * 自定义在线用户处理过滤器
      */
     @Bean
-    public OnlineSessionFilter onlineSessionFilter()
-    {
+    public OnlineSessionFilter onlineSessionFilter() {
         OnlineSessionFilter onlineSessionFilter = new OnlineSessionFilter();
         onlineSessionFilter.setLoginUrl(loginUrl);
         return onlineSessionFilter;
@@ -274,8 +257,7 @@ public class ShiroConfig
      * 自定义在线用户同步过滤器
      */
     @Bean
-    public SyncOnlineSessionFilter syncOnlineSessionFilter()
-    {
+    public SyncOnlineSessionFilter syncOnlineSessionFilter() {
         SyncOnlineSessionFilter syncOnlineSessionFilter = new SyncOnlineSessionFilter();
         return syncOnlineSessionFilter;
     }
@@ -284,8 +266,7 @@ public class ShiroConfig
      * 自定义验证码过滤器
      */
     @Bean
-    public CaptchaValidateFilter captchaValidateFilter()
-    {
+    public CaptchaValidateFilter captchaValidateFilter() {
         CaptchaValidateFilter captchaValidateFilter = new CaptchaValidateFilter();
         captchaValidateFilter.setCaptchaEnabled(captchaEnabled);
         captchaValidateFilter.setCaptchaType(captchaType);
@@ -295,8 +276,7 @@ public class ShiroConfig
     /**
      * cookie 属性设置
      */
-    public SimpleCookie rememberMeCookie()
-    {
+    public SimpleCookie rememberMeCookie() {
         SimpleCookie cookie = new SimpleCookie("rememberMe");
         cookie.setDomain(domain);
         cookie.setPath(path);
@@ -308,8 +288,7 @@ public class ShiroConfig
     /**
      * 记住我
      */
-    public CookieRememberMeManager rememberMeManager()
-    {
+    public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
         cookieRememberMeManager.setCipherKey(Base64.decode("fCq+/xW488hMTCD+cmJ3aQ=="));
@@ -320,8 +299,7 @@ public class ShiroConfig
      * thymeleaf模板引擎和shiro框架的整合
      */
     @Bean
-    public ShiroDialect shiroDialect()
-    {
+    public ShiroDialect shiroDialect() {
         return new ShiroDialect();
     }
 
@@ -330,8 +308,7 @@ public class ShiroConfig
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
-            @Qualifier("securityManager") SecurityManager securityManager)
-    {
+            @Qualifier("securityManager") SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;

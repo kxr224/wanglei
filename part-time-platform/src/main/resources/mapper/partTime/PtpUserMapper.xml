@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.partTime.mapper.PtpUserMapper">
+
+    <resultMap type="PtpUser" id="PtpUserResult">
+        <result property="userId" column="user_id"/>
+        <result property="wechatOpenId" column="wechat_open_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="wechatAvatar" column="wechat_avatar"/>
+        <result property="avatar" column="avatar"/>
+        <result property="mobile" column="mobile"/>
+        <result property="gender" column="gender"/>
+        <result property="education" column="education"/>
+        <result property="birthday" column="birthday"/>
+        <result property="city" column="city"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectPtpUserVo">
+        SELECT user_id,
+               wechat_open_id,
+               nickname,
+               wechat_avatar,
+               avatar,
+               mobile,
+               gender,
+               education,
+               birthday,
+               city,
+               email,
+               type,
+               status,
+               remark,
+               del_flag,
+               created_by,
+               created_time,
+               update_by,
+               update_time
+        FROM ptp_user
+    </sql>
+
+    <select id="selectPtpUserList" parameterType="PtpUser" resultMap="PtpUserResult">
+        <include refid="selectPtpUserVo"/>
+        <where>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="wechatOpenId != null  and wechatOpenId != '' ">and wechat_open_id = #{wechatOpenId}</if>
+            <if test="nickname != null  and nickname != '' ">and nickname = #{nickname}</if>
+            <if test="wechatAvatar != null  and wechatAvatar != '' ">and wechat_avatar = #{wechatAvatar}</if>
+            <if test="avatar != null ">and avatar = #{avatar}</if>
+            <if test="mobile != null  and mobile != '' ">and mobile = #{mobile}</if>
+            <if test="gender != null  and gender != '' ">and gender = #{gender}</if>
+            <if test="education != null  and education != '' ">and education = #{education}</if>
+            <if test="birthday != null ">and birthday = #{birthday}</if>
+            <if test="city != null  and city != '' ">and city = #{city}</if>
+            <if test="email != null  and email != '' ">and email = #{email}</if>
+            <if test="type != null  and type != '' ">and type = #{type}</if>
+            <if test="status != null  and status != '' ">and status = #{status}</if>
+            <if test="remark != null  and remark != '' ">and remark = #{remark}</if>
+            <if test="delFlag != null  and delFlag != '' ">and del_flag = #{delFlag}</if>
+            <if test="createdBy != null  and createdBy != '' ">and created_by = #{createdBy}</if>
+            <if test="createdTime != null ">and created_time = #{createdTime}</if>
+            <if test="updateBy != null  and updateBy != '' ">and update_by = #{updateBy}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectPtpUserById" parameterType="Integer" resultMap="PtpUserResult">
+        <include refid="selectPtpUserVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <select id="getUserByOpenId" parameterType="java.lang.String" resultMap="PtpUserResult">
+        <include refid="selectPtpUserVo"/>
+        WHERE wechat_open_id = #{openId}
+        LIMIT 1
+    </select>
+
+    <insert id="insertPtpUser" parameterType="PtpUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into ptp_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="wechatOpenId != null  and wechatOpenId != ''  ">wechat_open_id,</if>
+            <if test="nickname != null  and nickname != ''  ">nickname,</if>
+            <if test="wechatAvatar != null  and wechatAvatar != ''  ">wechat_avatar,</if>
+            <if test="avatar != null  ">avatar,</if>
+            <if test="mobile != null  and mobile != ''  ">mobile,</if>
+            <if test="gender != null  and gender != ''  ">gender,</if>
+            <if test="education != null  and education != ''  ">education,</if>
+            <if test="birthday != null  ">birthday,</if>
+            <if test="city != null  and city != ''  ">city,</if>
+            <if test="email != null  and email != ''  ">email,</if>
+            <if test="type != null  and type != ''  ">type,</if>
+            <if test="status != null  and status != ''  ">status,</if>
+            <if test="remark != null  and remark != ''  ">remark,</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by,</if>
+            <if test="createdTime != null  ">created_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="wechatOpenId != null  and wechatOpenId != ''  ">#{wechatOpenId},</if>
+            <if test="nickname != null  and nickname != ''  ">#{nickname},</if>
+            <if test="wechatAvatar != null  and wechatAvatar != ''  ">#{wechatAvatar},</if>
+            <if test="avatar != null  ">#{avatar},</if>
+            <if test="mobile != null  and mobile != ''  ">#{mobile},</if>
+            <if test="gender != null  and gender != ''  ">#{gender},</if>
+            <if test="education != null  and education != ''  ">#{education},</if>
+            <if test="birthday != null  ">#{birthday},</if>
+            <if test="city != null  and city != ''  ">#{city},</if>
+            <if test="email != null  and email != ''  ">#{email},</if>
+            <if test="type != null  and type != ''  ">#{type},</if>
+            <if test="status != null  and status != ''  ">#{status},</if>
+            <if test="remark != null  and remark != ''  ">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+            <if test="createdBy != null  and createdBy != ''  ">#{createdBy},</if>
+            <if test="createdTime != null  ">#{createdTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePtpUser" parameterType="PtpUser">
+        update ptp_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wechatOpenId != null  and wechatOpenId != ''  ">wechat_open_id = #{wechatOpenId},</if>
+            <if test="nickname != null  and nickname != ''  ">nickname = #{nickname},</if>
+            <if test="wechatAvatar != null  and wechatAvatar != ''  ">wechat_avatar = #{wechatAvatar},</if>
+            <if test="avatar != null  ">avatar = #{avatar},</if>
+            <if test="mobile != null  and mobile != ''  ">mobile = #{mobile},</if>
+            <if test="gender != null  and gender != ''  ">gender = #{gender},</if>
+            <if test="education != null  and education != ''  ">education = #{education},</if>
+            <if test="birthday != null  ">birthday = #{birthday},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="email != null  and email != ''  ">email = #{email},</if>
+            <if test="type != null  and type != ''  ">type = #{type},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="createdBy != null  and createdBy != ''  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deletePtpUserById" parameterType="Integer">
+        DELETE
+        FROM ptp_user
+        WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deletePtpUserByIds" parameterType="String">
+        delete from ptp_user where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper>

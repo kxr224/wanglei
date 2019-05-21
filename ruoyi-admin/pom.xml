@@ -59,7 +59,17 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>part-time-platform</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>wanglei-wechat-applet</artifactId>
+            <version>3.3</version>
+        </dependency>
     </dependencies>
 
     <build>
