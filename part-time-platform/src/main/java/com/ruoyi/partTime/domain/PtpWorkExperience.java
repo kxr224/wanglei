@@ -1,5 +1,7 @@
 package com.ruoyi.partTime.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -13,6 +15,8 @@ import lombok.EqualsAndHashCode;
  * @date 2019-05-20
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class PtpWorkExperience extends BaseEntity{
 	private static final long serialVersionUID = 1L;
@@ -24,4 +28,8 @@ public class PtpWorkExperience extends BaseEntity{
 	/** 工作经历 */
 	private String workExperience;
 
+	public PtpWorkExperience(Integer userId, String workExperience) {
+		this.userId = userId;
+		this.workExperience = workExperience;
+	}
 }

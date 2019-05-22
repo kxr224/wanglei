@@ -2,9 +2,11 @@ package com.ruoyi.web.controller.wechat;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.partTime.domain.PtpUser;
 import com.ruoyi.partTime.service.IPtpUserService;
 import lombok.AllArgsConstructor;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,14 @@ public class WeChatUserController extends BaseController {
         userService.insertPtpUser(ptpUser);
         AjaxResult res = AjaxResult.success();
         res.put("data",ptpUser);
+        return res;
+    }
+
+    @PostMapping("/save/userInfo")
+    public AjaxResult updateUserInfo(@RequestBody PtpUser ptpUser){
+        AjaxResult res = AjaxResult.success();
+        userService.updatePtpUser(ptpUser);
+        ShiroUtils.setWeChatUser(ptpUser);
         return res;
     }
 }

@@ -24,10 +24,16 @@
         <result property="createdTime" column="created_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <collection property="workList" ofType="java.lang.String" javaType="java.util.List">
+            <result column="work_experience"/>
+        </collection>
+        <collection property="educationList" ofType="java.lang.String" javaType="java.util.List">
+            <result column="education_experience"/>
+        </collection>
     </resultMap>
 
     <sql id="selectPtpUserVo">
-        SELECT user_id,
+        SELECT user.user_id,
                wechat_open_id,
                nickname,
                wechat_avatar,
@@ -45,14 +51,18 @@
                created_by,
                created_time,
                update_by,
-               update_time
-        FROM ptp_user
+               update_time,
+               work_experience,
+               education_experience
+        FROM ptp_user user
+                 left join ptp_work_experience on ptp_work_experience.user_id = user.user_id
+                 left join ptp_education_experience on ptp_education_experience.user_id = user.user_id
     </sql>
 
     <select id="selectPtpUserList" parameterType="PtpUser" resultMap="PtpUserResult">
         <include refid="selectPtpUserVo"/>
         <where>
-            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="userId != null ">and user.user_id = #{userId}</if>
             <if test="wechatOpenId != null  and wechatOpenId != '' ">and wechat_open_id = #{wechatOpenId}</if>
             <if test="nickname != null  and nickname != '' ">and nickname = #{nickname}</if>
             <if test="wechatAvatar != null  and wechatAvatar != '' ">and wechat_avatar = #{wechatAvatar}</if>
@@ -76,7 +86,7 @@
 
     <select id="selectPtpUserById" parameterType="Integer" resultMap="PtpUserResult">
         <include refid="selectPtpUserVo"/>
-        where user_id = #{userId}
+        where user.user_id = #{userId}
     </select>
 
     <select id="getUserByOpenId" parameterType="java.lang.String" resultMap="PtpUserResult">

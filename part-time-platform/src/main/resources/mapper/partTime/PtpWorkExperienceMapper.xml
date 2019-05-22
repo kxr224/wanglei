@@ -59,5 +59,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-    
+
+    <delete id="deleteByUserId" parameterType="Integer">
+        delete from ptp_work_experience where user_id = #{userId}
+    </delete>
+
+    <insert id="batchInsert" >
+        insert into ptp_work_experience (user_id, work_experience)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{userId},#{item})
+        </foreach>
+    </insert>
 </mapper>

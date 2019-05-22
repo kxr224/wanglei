@@ -1,6 +1,12 @@
 package com.ruoyi.partTime.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cn.hutool.core.date.DateUtil;
+import com.ruoyi.partTime.domain.PtpWorkExperience;
+import com.ruoyi.partTime.mapper.PtpEducationExperienceMapper;
+import com.ruoyi.partTime.mapper.PtpWorkExperienceMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +14,7 @@ import com.ruoyi.partTime.mapper.PtpUserMapper;
 import com.ruoyi.partTime.domain.PtpUser;
 import com.ruoyi.partTime.service.IPtpUserService;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 课程用户 服务层实现
@@ -19,7 +26,8 @@ import com.ruoyi.common.core.text.Convert;
 @AllArgsConstructor
 public class PtpUserServiceImpl implements IPtpUserService {
 	private final PtpUserMapper ptpUserMapper;
-
+	private final PtpEducationExperienceMapper educationExperienceMapper;
+	private final PtpWorkExperienceMapper workExperienceMapper;
 	/**
      * 查询课程用户信息
      * 
@@ -60,8 +68,25 @@ public class PtpUserServiceImpl implements IPtpUserService {
      * @return 结果
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public int updatePtpUser(PtpUser ptpUser){
-	    return ptpUserMapper.updatePtpUser(ptpUser);
+		int i = ptpUserMapper.updatePtpUser(ptpUser);
+		if (ptpUser.getParams() == null){
+			return i;
+		}
+		if (ptpUser.getWorkList() != null){
+			workExperienceMapper.deleteByUserId(ptpUser.getUserId());
+			if (ptpUser.getWorkList().size() != 0){
+				workExperienceMapper.batchInsert(ptpUser.getWorkList(),ptpUser.getUserId());
+			}
+		}
+		if (ptpUser.getEducationList() != null){
+			educationExperienceMapper.deleteByUserId(ptpUser.getUserId());
+			if (ptpUser.getEducationList().size() != 0){
+				educationExperienceMapper.batchInsert(ptpUser.getEducationList(),ptpUser.getUserId());
+			}
+		}
+	    return i;
 	}
 
 	/**
@@ -77,7 +102,11 @@ public class PtpUserServiceImpl implements IPtpUserService {
 
 	@Override
 	public PtpUser getUserByOpenId(String openId) {
-		return ptpUserMapper.getUserByOpenId(openId);
+		PtpUser user = ptpUserMapper.getUserByOpenId(openId);
+		if (user.getBirthday() != null) {
+			user.setAge(DateUtil.ageOfNow(user.getBirthday()));
+		}
+		return user;
 	}
 
 }
