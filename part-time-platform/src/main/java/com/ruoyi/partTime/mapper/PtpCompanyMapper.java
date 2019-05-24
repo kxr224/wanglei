@@ -3,6 +3,7 @@ package com.ruoyi.partTime.mapper;
 import com.ruoyi.partTime.domain.PtpCompany;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 /**
  * 企业 数据层
@@ -60,5 +61,11 @@ public interface PtpCompanyMapper {
      * @return 结果
      */
 	int deletePtpCompanyByIds(String[] ids);
-	
+
+	/**
+	 * 根据用户id获取企业信息
+	 * @param userId user id
+	 * @return 企业信息
+	 */
+	PtpCompany getPtpCompanyByUserId(@Param("userId") Integer userId);
 }

@@ -1,65 +1,79 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.partTime.mapper.PtpCompanyMapper">
-    
+
     <resultMap type="PtpCompany" id="PtpCompanyResult">
-        <result property="id"    column="id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="name"    column="name"    />
-        <result property="place"    column="place"    />
-        <result property="mobile"    column="mobile"    />
-        <result property="jobs"    column="jobs"    />
-        <result property="coverImg"    column="cover_img"    />
-        <result property="intro"    column="intro"    />
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="place" column="place"/>
+        <result property="mobile" column="mobile"/>
+        <result property="jobs" column="jobs"/>
+        <result property="coverImg" column="cover_img"/>
+        <result property="intro" column="intro"/>
     </resultMap>
-	
-	<sql id="selectPtpCompanyVo">
-        select id, user_id, name, place, mobile, jobs, cover_img, intro from ptp_company
+
+    <sql id="selectPtpCompanyVo">
+        select id,
+               user_id,
+               name,
+               place,
+               mobile,
+               jobs,
+               cover_img,
+               intro
+        from ptp_company
     </sql>
-	
+
     <select id="selectPtpCompanyList" parameterType="PtpCompany" resultMap="PtpCompanyResult">
         <include refid="selectPtpCompanyVo"/>
-        <where>  
-            <if test="id != null "> and id = #{id}</if>
-             <if test="userId != null "> and user_id = #{userId}</if>
-             <if test="name != null  and name != '' "> and name = #{name}</if>
-             <if test="place != null  and place != '' "> and place = #{place}</if>
-             <if test="mobile != null  and mobile != '' "> and mobile = #{mobile}</if>
-             <if test="jobs != null  and jobs != '' "> and jobs = #{jobs}</if>
-             <if test="coverImg != null  and coverImg != '' "> and cover_img = #{coverImg}</if>
-             <if test="intro != null  and intro != '' "> and intro = #{intro}</if>
-         </where>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="name != null  and name != '' ">and name = #{name}</if>
+            <if test="place != null  and place != '' ">and place = #{place}</if>
+            <if test="mobile != null  and mobile != '' ">and mobile = #{mobile}</if>
+            <if test="jobs != null  and jobs != '' ">and jobs = #{jobs}</if>
+            <if test="coverImg != null  and coverImg != '' ">and cover_img = #{coverImg}</if>
+            <if test="intro != null  and intro != '' ">and intro = #{intro}</if>
+        </where>
     </select>
-    
+
     <select id="selectPtpCompanyById" parameterType="Integer" resultMap="PtpCompanyResult">
         <include refid="selectPtpCompanyVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="getPtpCompanyByUserId" resultMap="PtpCompanyResult">
+        <include refid="selectPtpCompanyVo"/>
+        where user_id = #{userId}
+        limit 1
+    </select>
+
     <insert id="insertPtpCompany" parameterType="PtpCompany" useGeneratedKeys="true" keyProperty="id">
         insert into ptp_company
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="userId != null  ">user_id,</if>
-			<if test="name != null  and name != ''  ">name,</if>
-			<if test="place != null  and place != ''  ">place,</if>
-			<if test="mobile != null  and mobile != ''  ">mobile,</if>
-			<if test="jobs != null  and jobs != ''  ">jobs,</if>
-			<if test="coverImg != null  and coverImg != ''  ">cover_img,</if>
-			<if test="intro != null  and intro != ''  ">intro,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  ">user_id,</if>
+            <if test="name != null  and name != ''  ">name,</if>
+            <if test="place != null  and place != ''  ">place,</if>
+            <if test="mobile != null  and mobile != ''  ">mobile,</if>
+            <if test="jobs != null  and jobs != ''  ">jobs,</if>
+            <if test="coverImg != null  and coverImg != ''  ">cover_img,</if>
+            <if test="intro != null  and intro != ''  ">intro,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="userId != null  ">#{userId},</if>
-			<if test="name != null  and name != ''  ">#{name},</if>
-			<if test="place != null  and place != ''  ">#{place},</if>
-			<if test="mobile != null  and mobile != ''  ">#{mobile},</if>
-			<if test="jobs != null  and jobs != ''  ">#{jobs},</if>
-			<if test="coverImg != null  and coverImg != ''  ">#{coverImg},</if>
-			<if test="intro != null  and intro != ''  ">#{intro},</if>
-         </trim>
+            <if test="userId != null  ">#{userId},</if>
+            <if test="name != null  and name != ''  ">#{name},</if>
+            <if test="place != null  and place != ''  ">#{place},</if>
+            <if test="mobile != null  and mobile != ''  ">#{mobile},</if>
+            <if test="jobs != null  and jobs != ''  ">#{jobs},</if>
+            <if test="coverImg != null  and coverImg != ''  ">#{coverImg},</if>
+            <if test="intro != null  and intro != ''  ">#{intro},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updatePtpCompany" parameterType="PtpCompany">
         update ptp_company
         <trim prefix="SET" suffixOverrides=",">
@@ -74,15 +88,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-	<delete id="deletePtpCompanyById" parameterType="Integer">
-        delete from ptp_company where id = #{id}
+    <delete id="deletePtpCompanyById" parameterType="Integer">
+        delete
+        from ptp_company
+        where id = #{id}
     </delete>
-	
+
     <delete id="deletePtpCompanyByIds" parameterType="String">
-        delete from ptp_company where id in 
+        delete from ptp_company where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
+
 </mapper>

@@ -4,6 +4,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.partTime.domain.PtpUser;
+import com.ruoyi.partTime.service.IPtpCompanyService;
 import com.ruoyi.partTime.service.IPtpUserService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.loadtime.Aj;
@@ -34,4 +35,5 @@ public class WeChatUserController extends BaseController {
         ShiroUtils.setWeChatUser(ptpUser);
         return res;
     }
+
 }

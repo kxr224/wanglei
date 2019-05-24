@@ -74,5 +74,27 @@ public class PtpCompanyServiceImpl implements IPtpCompanyService {
 	public int deletePtpCompanyByIds(String ids){
 		return ptpCompanyMapper.deletePtpCompanyByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public PtpCompany saveCompany(PtpCompany company) {
+		if (company.getUserId() == null){
+			return null;
+		}
+		// 根据userId去数据库中查询一下，判断该用户是否已经填写了公司信息
+		PtpCompany companyOld = ptpCompanyMapper.getPtpCompanyByUserId(company.getUserId());
+		// 如果填写了就更新，如果没有填写就插入
+		if (companyOld != null){
+			company.setId(companyOld.getId());
+			updatePtpCompany(company);
+		}else{
+			insertPtpCompany(company);
+		}
+		// 如果填写了就更新
+		return company;
+	}
+
+	@Override
+	public PtpCompany selectCompanyByUserId(Integer userId) {
+		return ptpCompanyMapper.getPtpCompanyByUserId(userId);
+	}
 }
