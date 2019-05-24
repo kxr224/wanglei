@@ -68,4 +68,12 @@ public interface PtpCompanyMapper {
 	 * @return 企业信息
 	 */
 	PtpCompany getPtpCompanyByUserId(@Param("userId") Integer userId);
+
+	/**
+	 * 查询用户的收藏公司列表
+	 *
+	 * @param userId 要查找的用户id
+	 * @return 收藏公司列表
+	 */
+	List<PtpCompany> selectCollectCompanyList(@Param("userId") Integer userId);
 }

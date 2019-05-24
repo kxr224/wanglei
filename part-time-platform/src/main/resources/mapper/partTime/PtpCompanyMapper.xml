@@ -101,5 +101,18 @@
         </foreach>
     </delete>
 
+    <select id="selectCollectCompanyList" resultMap="PtpCompanyResult">
+        select id,
+               pc.user_id,
+               name,
+               place,
+               mobile,
+               jobs,
+               cover_img,
+               intro
+        from ptp_company pc
+                 inner join ptp_user_collect puc on pc.user_id = puc.company_user_id
+        where puc.user_id = #{userId}
+    </select>
 
 </mapper>

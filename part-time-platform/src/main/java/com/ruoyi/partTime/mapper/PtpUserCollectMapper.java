@@ -60,5 +60,12 @@ public interface PtpUserCollectMapper {
      * @return 结果
      */
 	int deletePtpUserCollectByIds(String[] companyUserIds);
-	
+
+	/**
+	 * 删除收藏信息
+	 *
+	 * @param ptpUserCollect 收藏对象
+	 * @return 影响行数
+	 */
+	int deleteUserCollect(PtpUserCollect ptpUserCollect);
 }

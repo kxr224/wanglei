@@ -25,7 +25,6 @@ public class WeChatComController extends BaseController {
     private final IPtpUserCollectService userCollectService;
 
 
-
     @PostMapping("/save/comInfo")
     public AjaxResult updateComInfo(@RequestBody PtpCompany ptpCompany) {
         AjaxResult res = AjaxResult.success();
@@ -52,54 +51,64 @@ public class WeChatComController extends BaseController {
         res.put("data", companyList);
         return res;
     }
+
     @PostMapping("/userList")
-    public AjaxResult selectUserList(@RequestBody  PtpUser ptpUser) {
+    public AjaxResult selectUserList(@RequestBody PtpUser ptpUser) {
         AjaxResult res = AjaxResult.success();
         List<PtpUser> userList = userService.selectPtpUserList(ptpUser);
         res.put("data", userList);
         return res;
     }
+
     @PostMapping("/selectCollection")
     public AjaxResult selectCollection(@RequestBody PtpUserCollect ptpUserCollect) {
         AjaxResult res = AjaxResult.success();
         ptpUserCollect.setUserId(ShiroUtils.getWeChatUser().getUserId());
         List<PtpUserCollect> userCollects = userCollectService.selectPtpUserCollectList(ptpUserCollect);
-        res.put("data",userCollects);
+        // 没收藏
+        if (userCollects == null || userCollects.size() == 0) {
+            res.put("isCollection", false);
+        } else {
+            res.put("isCollection", true);
+        }
         return res;
     }
+
     @PostMapping("/insertCollectList")
     public AjaxResult insertCollectList(@RequestBody PtpUserCollect ptpUserCollect) {
-        AjaxResult res = AjaxResult.success();
         ptpUserCollect.setUserId(ShiroUtils.getWeChatUser().getUserId());
-        userCollectService.insertPtpUserCollect(ptpUserCollect);
-        res.setCode(0);
-        return res;
+        return toAjax(userCollectService.insertPtpUserCollect(ptpUserCollect));
     }
+
     @PostMapping("/deleteCollectList")
     public AjaxResult deleteCollectList(@RequestBody PtpUserCollect ptpUserCollect) {
-        AjaxResult res = AjaxResult.success();
-        int del=userCollectService.deletePtpUserCollectByIds(ptpUserCollect.getCompanyUserId().toString());
-        if(del!=0){
-            res.setCode(0);
+        if (ptpUserCollect.getCompanyUserId() == null) {
+            return AjaxResult.error("请传入companyUserId");
         }
-        else{
-            res.setCode(1);
-        }
-        return res;
+        ptpUserCollect.setUserId(ShiroUtils.getWeChatUser().getUserId());
+        return toAjax(userCollectService.deleteUserCollect(ptpUserCollect));
     }
+
     @PostMapping("/selectUserByUserName")
     public AjaxResult selectUserByUserName(@RequestBody PtpUser ptpUser) {
-        AjaxResult res=AjaxResult.success();
+        AjaxResult res = AjaxResult.success();
         return res;
     }
+
     @PostMapping("/selectCompanyByName")
-    public AjaxResult selectCompanyByName(@RequestBody PtpCompany ptpCompany){
-        AjaxResult res=AjaxResult.success();
+    public AjaxResult selectCompanyByName(@RequestBody PtpCompany ptpCompany) {
+        AjaxResult res = AjaxResult.success();
         return res;
     }
 
-
-
+    @GetMapping("/list/collectCompany")
+    public AjaxResult listCollectCompany() {
+        Integer userId = ShiroUtils.getWeChatUser().getUserId();
+        List<PtpCompany> companies = companyService.selectCollectCompanyList(userId);
+        AjaxResult res = AjaxResult.success();
+        res.put("data", companies);
+        return res;
+    }
 
 
 }

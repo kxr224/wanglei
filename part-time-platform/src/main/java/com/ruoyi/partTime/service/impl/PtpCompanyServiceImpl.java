@@ -97,4 +97,9 @@ public class PtpCompanyServiceImpl implements IPtpCompanyService {
 	public PtpCompany selectCompanyByUserId(Integer userId) {
 		return ptpCompanyMapper.getPtpCompanyByUserId(userId);
 	}
+
+	@Override
+	public List<PtpCompany> selectCollectCompanyList(Integer userId) {
+		return ptpCompanyMapper.selectCollectCompanyList(userId) ;
+	}
 }

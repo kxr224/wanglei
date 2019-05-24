@@ -74,5 +74,10 @@ public class PtpUserCollectServiceImpl implements IPtpUserCollectService {
 	public int deletePtpUserCollectByIds(String ids){
 		return ptpUserCollectMapper.deletePtpUserCollectByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public int deleteUserCollect(PtpUserCollect ptpUserCollect) {
+		return ptpUserCollectMapper.deleteUserCollect(ptpUserCollect);
+	}
+
 }
