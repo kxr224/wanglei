@@ -74,4 +74,5 @@ public interface PtpUserMapper {
      * @date 2019-05-20
      */
     PtpUser getUserByOpenId(@Param("openId") String openId);
+    List<PtpUser> selectUserByName(@Param("nickname") String nickname);
 }

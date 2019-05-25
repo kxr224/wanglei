@@ -60,4 +60,8 @@ public interface IPtpUserService {
      * @date 2019-05-20
      */
     PtpUser getUserByOpenId(String openId);
+
+    List<PtpUser> selectUserByName(String nickname);
+
+
 }

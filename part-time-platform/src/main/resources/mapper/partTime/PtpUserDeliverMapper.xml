@@ -56,5 +56,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{companyUserId}
         </foreach>
     </delete>
+    <delete id="deletePtpUserDeliver" >
+        delete  from ptp_user_deliver
+            where user_id=#{userId}
+             and company_user_id=#{companyUserId}
+    </delete>
     
 </mapper>

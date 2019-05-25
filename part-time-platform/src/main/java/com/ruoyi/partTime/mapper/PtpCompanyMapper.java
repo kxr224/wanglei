@@ -76,4 +76,6 @@ public interface PtpCompanyMapper {
 	 * @return 收藏公司列表
 	 */
 	List<PtpCompany> selectCollectCompanyList(@Param("userId") Integer userId);
+	List<PtpCompany> selectCompanyByName(@Param("name") String name);
+	List<PtpCompany> selectDeliverCompanyList(@Param("userId") Integer userId);
 }

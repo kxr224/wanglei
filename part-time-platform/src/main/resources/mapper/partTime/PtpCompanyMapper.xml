@@ -45,6 +45,20 @@
         <include refid="selectPtpCompanyVo"/>
         where id = #{id}
     </select>
+    <select id="selectCompanyByName" parameterType="String" resultMap="PtpCompanyResult">
+        select id,
+               user_id,
+               name,
+               place,
+               mobile,
+               jobs,
+               cover_img,
+               intro
+        from ptp_company
+        where ptp_company.name like concat("%", #{name}, "%")
+           or ptp_company.jobs like concat("%", #{name}, "%")
+
+    </select>
 
     <select id="getPtpCompanyByUserId" resultMap="PtpCompanyResult">
         <include refid="selectPtpCompanyVo"/>
@@ -100,7 +114,19 @@
             #{id}
         </foreach>
     </delete>
-
+    <select id="selectDeliverCompanyList" resultMap="PtpCompanyResult">
+        select id,
+               pc.user_id,
+               name,
+               place,
+               mobile,
+               jobs,
+               cover_img,
+               intro
+        from ptp_company pc
+                 inner join ptp_user_deliver puc on pc.user_id = puc.company_user_id
+        where puc.user_id = #{userId}
+    </select>
     <select id="selectCollectCompanyList" resultMap="PtpCompanyResult">
         select id,
                pc.user_id,

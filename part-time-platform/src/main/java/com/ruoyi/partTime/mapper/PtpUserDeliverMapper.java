@@ -60,5 +60,5 @@ public interface PtpUserDeliverMapper {
      * @return 结果
      */
 	int deletePtpUserDeliverByIds(String[] companyUserIds);
-	
+	int deletePtpUserDeliver(PtpUserDeliver ptpUserDeliver);
 }

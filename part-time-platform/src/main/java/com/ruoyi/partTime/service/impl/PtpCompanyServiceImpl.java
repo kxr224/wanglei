@@ -102,4 +102,12 @@ public class PtpCompanyServiceImpl implements IPtpCompanyService {
 	public List<PtpCompany> selectCollectCompanyList(Integer userId) {
 		return ptpCompanyMapper.selectCollectCompanyList(userId) ;
 	}
+	@Override
+	public  List<PtpCompany> selectDeliverCompanyList(Integer userId){
+		return ptpCompanyMapper.selectDeliverCompanyList(userId);
+	}
+	@Override
+	public List<PtpCompany> selectCompanyByName(String name){
+		return ptpCompanyMapper.selectCompanyByName(name);
+	}
 }

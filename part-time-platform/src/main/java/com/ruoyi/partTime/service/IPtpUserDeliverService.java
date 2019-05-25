@@ -49,5 +49,5 @@ public interface IPtpUserDeliverService {
      * @return 结果
      */
 	int deletePtpUserDeliverByIds(String ids);
-	
+	int deletePtpUserDeliver(PtpUserDeliver ptpUserDeliver);
 }

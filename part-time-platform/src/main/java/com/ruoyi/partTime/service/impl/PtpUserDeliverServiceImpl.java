@@ -74,5 +74,9 @@ public class PtpUserDeliverServiceImpl implements IPtpUserDeliverService {
 	public int deletePtpUserDeliverByIds(String ids){
 		return ptpUserDeliverMapper.deletePtpUserDeliverByIds(Convert.toStrArray(ids));
 	}
+	@Override
+	public int deletePtpUserDeliver(PtpUserDeliver ptpUserDeliver){
+		return ptpUserDeliverMapper.deletePtpUserDeliver(ptpUserDeliver);
+	}
 	
 }

@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("weChat/user")
 @AllArgsConstructor
+//学生登录控制
 public class WeChatUserController extends BaseController {
     private final IPtpUserService userService;
 
@@ -27,12 +30,18 @@ public class WeChatUserController extends BaseController {
         res.put("data",ptpUser);
         return res;
     }
-
     @PostMapping("/save/userInfo")
     public AjaxResult updateUserInfo(@RequestBody PtpUser ptpUser){
         AjaxResult res = AjaxResult.success();
         userService.updatePtpUser(ptpUser);
         ShiroUtils.setWeChatUser(ptpUser);
+        return res;
+    }
+    @PostMapping("/selectUserByName")
+    public AjaxResult selectUserByName(@RequestBody PtpUser ptpUser){
+        AjaxResult res = AjaxResult.success();
+        List<PtpUser> users=userService.selectUserByName(ptpUser.getNickname());
+        res.put("data",users);
         return res;
     }
 

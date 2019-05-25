@@ -66,7 +66,11 @@ public interface IPtpCompanyService {
      * @return 公司信息
      */
     PtpCompany selectCompanyByUserId(Integer userId);
-
+    /**
+     *通过公司名搜索公司
+     * @return 公司信息
+     */
+    List<PtpCompany> selectCompanyByName(String name);
     /**
      * 查询用户的收藏公司列表
      *
@@ -74,5 +78,6 @@ public interface IPtpCompanyService {
      * @return 收藏公司列表
      */
     List<PtpCompany> selectCollectCompanyList(Integer userId);
+    List<PtpCompany> selectDeliverCompanyList(Integer userId);
 
 }

@@ -102,6 +102,10 @@ public class PtpUserServiceImpl implements IPtpUserService {
     }
 
     @Override
+    public List<PtpUser> selectUserByName(String nickname){
+        return ptpUserMapper.selectUserByName(nickname);
+    }
+    @Override
     public PtpUser getUserByOpenId(String openId) {
         PtpUser user = ptpUserMapper.getUserByOpenId(openId);
         if (user != null && user.getBirthday() != null) {
