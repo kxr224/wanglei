@@ -2,7 +2,10 @@ package com.ruoyi.partTime.mapper;
 
 import com.ruoyi.partTime.domain.PtpCompanyCollect;
 import java.util.List;
+
+import com.ruoyi.partTime.domain.PtpUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 /**
  * 企业收藏 数据层
@@ -60,5 +63,6 @@ public interface PtpCompanyCollectMapper {
      * @return 结果
      */
 	int deletePtpCompanyCollectByIds(String[] companyUserIds);
-	
+	int deleteCompanyCollect(PtpCompanyCollect ptpCompanyCollect);
+	List<PtpUser> selectCollectUserList(@Param("companyUserId") Integer companyUserId);
 }

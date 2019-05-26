@@ -8,11 +8,66 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="companyUserId"    column="company_user_id"    />
         <result property="userId"    column="user_id"    />
     </resultMap>
-	
+
+    <resultMap type="PtpUser" id="PtpUserResult">
+        <result property="userId" column="user_id"/>
+        <result property="wechatOpenId" column="wechat_open_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="wechatAvatar" column="wechat_avatar"/>
+        <result property="avatar" column="avatar"/>
+        <result property="mobile" column="mobile"/>
+        <result property="gender" column="gender"/>
+        <result property="education" column="education"/>
+        <result property="birthday" column="birthday"/>
+        <result property="city" column="city"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="workList" ofType="java.lang.String" javaType="java.util.List">
+            <result column="work_experience"/>
+        </collection>
+        <collection property="educationList" ofType="java.lang.String" javaType="java.util.List">
+            <result column="education_experience"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectCollectUserList" parameterType="Integer" resultMap="PtpUserResult">
+        SELECT user.user_id,
+               wechat_open_id,
+               nickname,
+               wechat_avatar,
+               avatar,
+               mobile,
+               gender,
+               education,
+               birthday,
+               city,
+               email,
+               type,
+               status,
+               remark,
+               del_flag,
+               created_by,
+               created_time,
+               update_by,
+               update_time,
+               work_experience,
+               education_experience
+        FROM ptp_user user
+                 left join ptp_work_experience on ptp_work_experience.user_id = user.user_id
+                 left join ptp_education_experience on ptp_education_experience.user_id = user.user_id
+                 inner join ptp_company_collect puc on puc.user_id = #{companyUserId}
+                 </select>
+
 	<sql id="selectPtpCompanyCollectVo">
         select company_user_id, user_id from ptp_company_collect
     </sql>
-	
     <select id="selectPtpCompanyCollectList" parameterType="PtpCompanyCollect" resultMap="PtpCompanyCollectResult">
         <include refid="selectPtpCompanyCollectVo"/>
         <where>  
@@ -20,12 +75,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="userId != null "> and user_id = #{userId}</if>
          </where>
     </select>
-    
+
+
+
     <select id="selectPtpCompanyCollectById" parameterType="Integer" resultMap="PtpCompanyCollectResult">
         <include refid="selectPtpCompanyCollectVo"/>
         where company_user_id = #{companyUserId}
     </select>
-        
+
     <insert id="insertPtpCompanyCollect" parameterType="PtpCompanyCollect">
         insert into ptp_company_collect
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -49,7 +106,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deletePtpCompanyCollectById" parameterType="Integer">
         delete from ptp_company_collect where company_user_id = #{companyUserId}
     </delete>
-	
+	<delete id="deleteCompanyCollect">
+        delete
+        from ptp_company_collect
+        where user_id = #{userId}
+          and company_user_id = #{companyUserId}
+    </delete>
     <delete id="deletePtpCompanyCollectByIds" parameterType="String">
         delete from ptp_company_collect where company_user_id in 
         <foreach item="companyUserId" collection="array" open="(" separator="," close=")">

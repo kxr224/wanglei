@@ -63,7 +63,7 @@ public class WeChatComController extends BaseController {
         res.put("data", userList);
         return res;
     }
-    //查看收藏列表
+    //查询人才是否收藏了该公司
     @PostMapping("/selectCollection")
     public AjaxResult selectCollection(@RequestBody PtpUserCollect ptpUserCollect) {
         AjaxResult res = AjaxResult.success();

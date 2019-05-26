@@ -1,6 +1,8 @@
 package com.ruoyi.partTime.service;
 
 import com.ruoyi.partTime.domain.PtpCompanyCollect;
+import com.ruoyi.partTime.domain.PtpUser;
+
 import java.util.List;
 
 /**
@@ -49,5 +51,6 @@ public interface IPtpCompanyCollectService {
      * @return 结果
      */
 	int deletePtpCompanyCollectByIds(String ids);
-	
+	int deleteCompanyCollect(PtpCompanyCollect ptpCompanyCollect);
+	List<PtpUser> selectCollectUserList(Integer companyUserId);
 }

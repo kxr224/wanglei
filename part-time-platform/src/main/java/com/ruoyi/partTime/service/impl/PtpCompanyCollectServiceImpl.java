@@ -1,6 +1,8 @@
 package com.ruoyi.partTime.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.partTime.domain.PtpUser;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +76,12 @@ public class PtpCompanyCollectServiceImpl implements IPtpCompanyCollectService {
 	public int deletePtpCompanyCollectByIds(String ids){
 		return ptpCompanyCollectMapper.deletePtpCompanyCollectByIds(Convert.toStrArray(ids));
 	}
-	
+	@Override
+	public int deleteCompanyCollect(PtpCompanyCollect ptpCompanyCollect){
+		return ptpCompanyCollectMapper.deleteCompanyCollect(ptpCompanyCollect);
+	}
+	@Override
+	public List<PtpUser> selectCollectUserList(Integer companyUserId){
+		return ptpCompanyCollectMapper.selectCollectUserList(companyUserId) ;
+	}
 }
