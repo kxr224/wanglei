@@ -62,8 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM ptp_user user
                  left join ptp_work_experience on ptp_work_experience.user_id = user.user_id
                  left join ptp_education_experience on ptp_education_experience.user_id = user.user_id
-                 inner join ptp_company_collect puc on puc.user_id = #{companyUserId}
-                 </select>
+                 inner join ptp_company_collect puc on puc.user_id = user.user_id where puc.company_user_id=#{companyUserId}
+    </select>
 
 	<sql id="selectPtpCompanyCollectVo">
         select company_user_id, user_id from ptp_company_collect
